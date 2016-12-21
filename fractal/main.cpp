@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <math.h>
 //#include <fstream>
 //#include "BitmapFileHeader.h" //took out, included in Bitmap.h
 //#include "BitmapInfoHeader.h"
@@ -72,7 +73,7 @@ int main(int argc, char** argv) {
             }
 
             uint8_t red = 0;
-            uint8_t green = hue*255;
+            uint8_t green = pow(255, hue);
             uint8_t blue = 0;
             
             bitmap.setPixel(x, y, red, green, blue);
