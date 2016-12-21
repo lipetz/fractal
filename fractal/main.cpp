@@ -21,6 +21,7 @@
 //#include "BitmapInfoHeader.h"
 #include "Bitmap.h"
 #include "Mandelbrot.h"
+#include "ZoomList.h"
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -34,6 +35,12 @@ int main(int argc, char** argv) {
 
     double min = 99999999;
     double max = -99999999;
+    
+    ZoomList zoomList(WIDTH, HEIGHT);
+    zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 4.0/WIDTH));
+    zoomList.add(Zoom(295, HEIGHT - 202, 0.1));
+    zoomList.add(Zoom(312, 304, 0.1));
+   
 
     //unique_ptr<int[]> histogram(new int[Mandelbrot::MAX_ITERATIONS+1]() /*initialize all to 0*/ ); //Plus 1 because max = 1000, and increment the iterations in the while, so can be max, so need max+1
     unique_ptr<int[] > histogram(new int[Mandelbrot::MAX_ITERATIONS ]() /*initialize all to 0*/); //Take out the +1 because don't want to store the ones that are on the max-iterations  Will check when put in
@@ -45,12 +52,8 @@ int main(int argc, char** argv) {
             //bitmap.setPixel(x, y, 255, 255, 0);
             //Need same scaling factor, so make div by HEIGHT for both.
             //+ or - shifts the direction.  Multiplying stretches
-            //double xFractal = (x - WIDTH/2 - 200) * 2.0/WIDTH ; // we want a range between -1 and +1
-            double xFractal = (x - WIDTH / 2 - 200) * 2.0 / HEIGHT;
-            //double yFractal = (y - HEIGHT/2) * 2.0/HEIGHT ;
-            double yFractal = (y - HEIGHT / 2) * 2.0 / HEIGHT;
-
-            int iterations = Mandelbrot::getIterations(xFractal, yFractal);
+            pair<double, double> coords = zoomList.doZoom(x,y);
+            int iterations = Mandelbrot::getIterations(coords.first, coords.second);
 
             fractal[(y * WIDTH) + x] = iterations; //stores the numbers of iterations per pixel.
             if (iterations != Mandelbrot::MAX_ITERATIONS)
