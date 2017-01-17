@@ -13,7 +13,7 @@
 
 #include "ZoomList.h"
 #include <utility>
-#include <iostream>
+//#include <iostream>
 using namespace std;
 
 ZoomList::ZoomList(int width, int height): m_width(width), m_height(height) {
@@ -27,7 +27,7 @@ void ZoomList::add(const Zoom & zoom){
     
     m_scale *= zoom.scale;
     
-    cout << m_xCenter << ", " << m_yCenter << ", " << m_scale << endl;
+    //cout << m_xCenter << ", " << m_yCenter << ", " << m_scale << endl;
 }
 
 std::pair<double, double> ZoomList::doZoom(int x, int y){

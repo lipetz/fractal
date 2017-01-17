@@ -20,6 +20,7 @@ using namespace std;
 
 class Bitmap {
 public:
+    Bitmap(){}
     Bitmap(int width, int height);
     Bitmap(const Bitmap& orig);
     virtual ~Bitmap();

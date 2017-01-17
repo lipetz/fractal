@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Bitmap.o \
+	${OBJECTDIR}/FractalCreator.o \
 	${OBJECTDIR}/Mandelbrot.o \
 	${OBJECTDIR}/ZoomList.o \
 	${OBJECTDIR}/main.o
@@ -69,6 +70,11 @@ ${OBJECTDIR}/Bitmap.o: Bitmap.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Bitmap.o Bitmap.cpp
+
+${OBJECTDIR}/FractalCreator.o: FractalCreator.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FractalCreator.o FractalCreator.cpp
 
 ${OBJECTDIR}/Mandelbrot.o: Mandelbrot.cpp
 	${MKDIR} -p ${OBJECTDIR}

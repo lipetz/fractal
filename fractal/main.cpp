@@ -19,88 +19,24 @@
 //#include <fstream>
 //#include "BitmapFileHeader.h" //took out, included in Bitmap.h
 //#include "BitmapInfoHeader.h"
-#include "Bitmap.h"
-#include "Mandelbrot.h"
-#include "ZoomList.h"
+
+#include "FractalCreator.h"
+
 using namespace std;
 
 int main(int argc, char** argv) {
 
     cout << "Hello World!\n";
 
-    int const WIDTH = 800;
-    int const HEIGHT = 600;
+    int height = 600;
 
-    Bitmap bitmap(WIDTH, HEIGHT);
-
-    double min = 99999999;
-    double max = -99999999;
-    
-    ZoomList zoomList(WIDTH, HEIGHT);
-    zoomList.add(Zoom(WIDTH/2, HEIGHT/2, 4.0/WIDTH));
-    zoomList.add(Zoom(295, HEIGHT - 202, 0.1));
-    zoomList.add(Zoom(312, 304, 0.1));
-   
-
-    //unique_ptr<int[]> histogram(new int[Mandelbrot::MAX_ITERATIONS+1]() /*initialize all to 0*/ ); //Plus 1 because max = 1000, and increment the iterations in the while, so can be max, so need max+1
-    unique_ptr<int[] > histogram(new int[Mandelbrot::MAX_ITERATIONS ]() /*initialize all to 0*/); //Take out the +1 because don't want to store the ones that are on the max-iterations  Will check when put in
-    unique_ptr<int[] > fractal(new int[WIDTH * HEIGHT]() /*initialize all to 0*/); //Storing info for all pixels
-
-
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            //bitmap.setPixel(x, y, 255, 255, 0);
-            //Need same scaling factor, so make div by HEIGHT for both.
-            //+ or - shifts the direction.  Multiplying stretches
-            pair<double, double> coords = zoomList.doZoom(x,y);
-            int iterations = Mandelbrot::getIterations(coords.first, coords.second);
-
-            fractal[(y * WIDTH) + x] = iterations; //stores the numbers of iterations per pixel.
-            if (iterations != Mandelbrot::MAX_ITERATIONS)
-                histogram[iterations]++;
-        }
-    }
-
-    int totalIterations = 0;
-    for (int i = 0; i < Mandelbrot::MAX_ITERATIONS; i++) {
-        totalIterations += histogram[i];
-    }
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            int iterations = fractal[(y * WIDTH) + x];
-            //uint8_t color = (uint8_t) (256 * (double) iterations / Mandelbrot::MAX_ITERATIONS);
-
-            double hue = 0.0;
-            for (int i = 0; i <= iterations; i++) {
-                hue += ((double) histogram[i]) / totalIterations;
-            }
-
-            uint8_t red = 0;
-            uint8_t green = pow(255, hue);
-            uint8_t blue = 0;
-            
-            bitmap.setPixel(x, y, red, green, blue);
-
- 
-        }
-    }
-
-
-
-
-
-    /*
-        cout << min << ", " << max << endl;
-
-        int sum = 0;
-        for (int i = 0; i < Mandelbrot::MAX_ITERATIONS; ++i) {
-            sum += histogram[i];
-            cout << histogram[i] << " ";
-        }
-        cout << "\nsum: " << sum << " ; " << WIDTH * HEIGHT << endl;
-     */
-
-    bitmap.write("test.bmp");
+    FractalCreator fractalCreator(800, 600);
+    fractalCreator.addZoom(Zoom(295, height - 202, 0.1));
+    fractalCreator.addZoom(Zoom(312, 304, 0.1));
+    fractalCreator.calculateIterations();
+    fractalCreator.calculateTotalIterations();
+    fractalCreator.drawFractal();
+    fractalCreator.writeBitmap("test.bmp");
 
     cout << "finished" << endl;
     return 0;

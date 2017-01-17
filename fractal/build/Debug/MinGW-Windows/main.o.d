@@ -1,10 +1,12 @@
-build/Debug/MinGW-Windows/main.o: main.cpp Bitmap.h Mandelbrot.h \
- ZoomList.h Zoom.h
+build/Debug/MinGW-Windows/main.o: main.cpp FractalCreator.h Zoom.h \
+ ZoomList.h Bitmap.h Mandelbrot.h
+
+FractalCreator.h:
+
+Zoom.h:
+
+ZoomList.h:
 
 Bitmap.h:
 
 Mandelbrot.h:
-
-ZoomList.h:
-
-Zoom.h:
